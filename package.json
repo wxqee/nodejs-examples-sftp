@@ -1,0 +1,17 @@
+{
+  "name": "acx-sftp-client",
+  "version": "0.0.1",
+  "description": "a sftp tool for downloading file from sftp to local driver.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sftp"
+  ],
+  "author": "Wang Xiaoqiang",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "ssh2": "~0.2.16"
+  }
+}
