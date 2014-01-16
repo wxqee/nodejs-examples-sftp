@@ -1,40 +1,30 @@
+var cronjobs = require('./lib/cronjobs');
+// -----------------------------------------------------------------
 
-var c = new (require('ssh2'))();
+var schedule = require('pomelo-schedule');
 
-c.on('ready', function() {
-	console.log('Connection :: ready');
+var data = {
+	name: "schedule>>> sftp downloading DATA file",
+	remoteFile: '/home/xiwang/setup/mysql-5.5.17.tar.gz',
+	localFile: __dirname + '/mysql-5.5.17.tar.gz',
+	host: 'localhost',
+	port: 22,
+	username: 'xiwang',
+	password: 'mypassword'
+};
 
-	c.sftp(function(err, sftp) {
-		if (err) throw err;
-
-		sftp.on('end', function() {
-			console.log('SFTP :: SFTP session closed');
-		});
-
-		sftp.fastGet('/download/test.java', __dirname + '/download/test.java', function(err) {
-			if (err) throw err;
-			console.log('download file successfully.');
-			sftp.end();
-		});
-	});
-});
-
-c.on('error', function(err) {
-	console.log('Connection :: error :: ' + err);
-});
-
-c.on('end', function() {
-	console.log('Connection :: end');
-});
-
-c.on('close', function(had_error) {
-	console.log('Connection :: close');
-});
-
-c.connect({
-	host: 'demo.wftpserver.com',
-	port: 2222,
-	username: 'demo-user',
-	password: 'demo-user'
-});
+/*
+-------------------------------
+1     2     3     4   5    6
+-------------------------------
+|     |     |     |   |    |
+|     |     |     |   |    +----- day of week (0 - 6) (Sunday=0)
+|     |     |     |   +------- month (1 - 12)
+|     |     |     +--------- day of month (1 - 31)
+|     |     +----------- hour (0 - 23)
+|     +------------- min (0 - 59)
++------------- second (0 - 59)
+*/
+schedule.scheduleJob("0 0 9 * * 1", cronjobs.downloadFile, data);
+// schedule.scheduleJob("0/10 * * * * *", cronjobs.downloadFile, data);
 
